@@ -59,6 +59,21 @@ float** multiplyArrays(float **m1, float **m2, int rows1, int cols1, int rows2, 
   return mr;
 }
 
+void writeArray(float **mr, int rows, int cols){
+  FILE *stream;
+  int i,j;
+  stream = fopen("mr.txt", "w+");
+  fprintf(stream, "%d\n", rows);
+  fprintf(stream, "%d\n", cols);
+  for(i=0;i<rows;i++){
+    for(j=0;j<cols;j++){
+      fprintf(stream, "%f,", *(*(mr + i) + j) );
+    }
+    fprintf(stream, "%s\n","");
+  }
+  fclose(stream);
+}
+
 int main(int argc, char** argv){
 
 
@@ -105,6 +120,8 @@ int main(int argc, char** argv){
 
   printf("Final Matriz:\n");
   printArray(mr, rows1, cols2);
+
+  writeArray(mr, rows1, cols2);
 
 
   fclose(stream);
