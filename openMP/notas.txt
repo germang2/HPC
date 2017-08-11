@@ -1,0 +1,5 @@
+#la cantidad de hilos por defecto las da el SO
+#se puede cambiar la cantidad de hilos, en linux, con el comando export OMP_NUM_THREADS=8
+#OMP_NUM_THREADS es una variable de entorno del SO
+#por defecto, el hilo maestro es el numero 0
+#con la funcion omp_get_thread_num() se obtiene el identificador del hilo
