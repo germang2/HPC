@@ -67,7 +67,7 @@ void writeArray(float **mr, int rows, int cols){
   fprintf(stream, "%d\n", cols);
   for(i=0;i<rows;i++){
     for(j=0;j<cols;j++){
-      fprintf(stream, "%f,", *(*(mr + i) + j) );
+      fprintf(stream, "%.2f,", *(*(mr + i) + j) );
     }
     fprintf(stream, "%s\n","");
   }
@@ -98,8 +98,8 @@ int main(int argc, char** argv){
 
   //Verify that the number of rows of the firts array should be equal 
   //to the number of columns of the second array
-  if(rows1 != cols2){
-    printf("Invalid operation, the number of rows of the firts matrix should be equal to the number of columns of the second matrix\n");
+  if(cols1 != rows2){
+    printf("Invalid operation, the number of cols of the firts matrix should be equal to the number of rows of the second matrix\n");
     return 1;
   }
 
@@ -110,17 +110,17 @@ int main(int argc, char** argv){
   //Assign the values to the array
   m1 = assignArray(m1, stream, rows1, cols1);
   m2 = assignArray(m2, stream2, rows2, cols2);
-
+/*
   printf("Matriz 1:\n");
   printArray(m1, rows1, cols1);
   printf("Matriz 2:\n");
   printArray(m2, rows2, cols2);
-
+*/
   mr = multiplyArrays(m1, m2, rows1, cols1, rows2, cols2);
-
+/*
   printf("Final Matriz:\n");
   printArray(mr, rows1, cols2);
-
+*/
   writeArray(mr, rows1, cols2);
 
 
