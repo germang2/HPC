@@ -4,7 +4,7 @@
 //This function ask for memory for the respective size of each array
 float** startArray(float **m, int rows, int cols){
   int i;
-  m = (float **)malloc(rows*sizeof(float));
+  m = (float**)malloc(rows*sizeof(float*));
 
   for(i=0;i<rows;i++)
     m[i] = (float *)malloc(cols*sizeof(float));
@@ -62,7 +62,7 @@ float** multiplyArrays(float **m1, float **m2, int rows1, int cols1, int rows2, 
 void writeArray(float **mr, int rows, int cols){
   FILE *stream;
   int i,j;
-  stream = fopen("mr.txt", "w+");
+  stream = fopen("mr.txt", "w");
   fprintf(stream, "%d\n", rows);
   fprintf(stream, "%d\n", cols);
   for(i=0;i<rows;i++){
