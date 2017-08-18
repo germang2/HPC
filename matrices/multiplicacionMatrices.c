@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 //This function ask for memory for the respective size of each array
 float** startArray(float **m, int rows, int cols){
@@ -76,6 +77,7 @@ void writeArray(float **mr, int rows, int cols){
 
 int main(int argc, char** argv){
 
+  clock_t cl = clock();
 
   if(argc != 3){
     printf("This need be called with 2 arguments, the .txt files with the values of the arrays\n");
@@ -116,6 +118,7 @@ int main(int argc, char** argv){
   printf("Matriz 2:\n");
   printArray(m2, rows2, cols2);
 */
+  
   mr = multiplyArrays(m1, m2, rows1, cols1, rows2, cols2);
 /*
   printf("Final Matriz:\n");
@@ -129,6 +132,8 @@ int main(int argc, char** argv){
   free(m1);
   free(m2);
   free(mr);
+
+  printf("\tExcution time: %f ms\n", (float)(clock()-cl)*1000/CLOCKS_PER_SEC);
 
   return 0;
 }
