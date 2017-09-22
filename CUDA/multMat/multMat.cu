@@ -45,7 +45,7 @@ int main(){
    h_A = (double*)malloc((rowsA*colsA)*sizeof(double));
    h_B = (double*)malloc((rowsB*colsB)*sizeof(double));
    CPU = (double*)malloc((rowsA*colsB)*sizeof(double));
-
+   h_C = (double*)malloc((rowsA*colsB)*sizeof(double));
 
    for(i = 0; i < rowsA; i++)
       for(j = 0; j < colsA; j++)
@@ -55,25 +55,30 @@ int main(){
       for(j = 0; j < colsB; j++)
          h_B[i* colsB+j] = i+j;
    
-   cudaMalloc((void **)&d_A, rowsA*colsA);
-   cudaMalloc((void **)&d_B, rowsB*colsB);
-   cudaMalloc((void **)&d_C, rowsA*colsB); 
+   cudaMalloc((void **)&d_A, rowsA*colsA*sizeof(double));
+   cudaMalloc((void **)&d_B, rowsB*colsB*sizeof(double));
+   cudaMalloc((void **)&d_C, rowsA*colsB*sizeof(double)); 
    
-   cudaMemcpy(d_A, h_A, rowsA*colsA, cudaMemcpyHostToDevice);
-   cudaMemcpy(d_B, h_B, rowsA*colsB, cudaMemcpyHostToDevice);
+   cudaMemcpy(d_A, h_A, rowsA*colsA*sizeof(double), cudaMemcpyHostToDevice);
+   cudaMemcpy(d_B, h_B, rowsA*colsB*sizeof(double), cudaMemcpyHostToDevice);
 
-   int gridSize, blockSize;
-   blockSize = 1024;
-   gridSize = (int)ceil((float)colsB/blockSize);   
+   int threads = 32;
+   dim3 gridSize(ceil(colsB/(double)threads), ceil(rowsA/(double)threads), 1);
+   dim3 blockSize(threads, threads, 1);
+  
 
    multMatGPU<<<gridSize, blockSize>>>(d_A, rowsA, colsA, d_B, rowsB, colsB, d_C);
-   cudaMemcpy(h_C, d_C, rowsA*colsB, cudaMemcpyDeviceToHost);
+   cudaDeviceSynchronize();
+   cudaMemcpy(h_C, d_C, rowsA*colsB*sizeof(double), cudaMemcpyDeviceToHost);
    multMatHost(h_A, rowsA, colsA, h_B, rowsB, colsB, CPU);
 
    int val = 1;
-   for(i = 0; i < colsB; i++)
-      if(CPU[i] != h_C[i])
-         val = 0;
+   for(i = 0; i < rowsA; i++){
+      for(j = 0; j < colsB; j++){
+         if(CPU[i*colsB+j] != h_C[i*colsB+j])
+            val = 0;
+      }
+   }
 
    if(val == 1)
       printf("Same results");

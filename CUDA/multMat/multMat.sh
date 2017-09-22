@@ -2,7 +2,7 @@
 
 #SBATCH --job-name=multMat
 #SBATCH --output=res_multMat.out
-#SBATCH --ntask=1
+#SBATCH --ntasks=1
 #SBATCH --nodes=1
 #SBATCH  --gres=gpu:1
 
